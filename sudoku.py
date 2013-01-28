@@ -92,12 +92,17 @@ def branches(grid):
                 raise StopIteration()
     raise StopIteration()
 
+def unsolvable(grid):
+    return any(any(c == [] for c in row) for row in grid)
+
 def solve(grid):
     grid = copy.deepcopy(grid)
     add_possibilities(grid)
     def do_solve(grid):
         progress = True
         while progress:
+            if unsolvable(grid):
+                return
             progress = False
             for shape in get_shapes(grid):
                 progress = remove_taken_numbers(shape) or progress
