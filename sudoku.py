@@ -80,16 +80,26 @@ def remove_taken_numbers(shape):
     return progress
 
 def branches(grid):
+    smallest_branches = 0
+    smallest_branches_row_index = -1
+    smallest_branches_cell_index = -1
     for row_index in range(len(grid)):
         row = grid[row_index]
         for cell_index in range(len(row)):
             cell = row[cell_index]
-            if len(cell) > 1:
-                for val in cell:
-                    branch = copy.deepcopy(grid)
-                    branch[row_index][cell_index] = [val]
-                    yield branch
-                raise StopIteration()
+            if len(cell) > 1 and smallest_branches == 0 or len(cell) < smallest_branches:
+                smallest_branches = len(cell)
+                smallest_branches_row_index = row_index
+                smallest_branches_cell_index = cell_index
+                if smallest_branches == 2:
+                    break
+        if smallest_branches == 2:
+            break
+    if smallest_branches:
+        for val in grid[smallest_branches_row_index][smallest_branches_cell_index]:
+            branch = copy.deepcopy(grid)
+            branch[smallest_branches_row_index][smallest_branches_cell_index] = [val]
+            yield branch
     raise StopIteration()
 
 def unsolvable(grid):
