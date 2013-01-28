@@ -1,8 +1,8 @@
 def parse(text):
-	return [[int(c) for c in row] for row in text.split("\n")]
+	return [[[] if c == "0" else [int(c)] for c in row] for row in text.split("\n")]
 
 def emit(grid):
-	return "\n".join(["".join([str(c) for c in row]) for row in grid])
+	return "\n".join(["".join([str(c[0] if len(c) > 0 else 0) for c in row]) for row in grid])
 
 def get_row(grid, row_index):
 	return grid[row_index]
@@ -18,10 +18,10 @@ def get_subgrid(grid, subgrid_row_index, subgrid_column_index):
 	return subgrid
 
 def valid(shape):
-	return all([c == 0 or shape.count(c) == 1 for c in shape])
+	return all([len(c) != 1 or sum([c2.count(c[0]) for c2 in shape]) == 1 for c in shape])
 
 def complete(shape):
-	return not 0 in shape
+	return all([len(c) == 1 for c in shape])
 
 def valid_row(grid, row_index):
 	return valid(get_row(grid, row_index))
@@ -60,3 +60,6 @@ def complete_grid(grid):
 
 def solved_grid(grid):
 	return valid_grid(grid) and complete_grid(grid)
+
+def solve(grid):
+    return grid
